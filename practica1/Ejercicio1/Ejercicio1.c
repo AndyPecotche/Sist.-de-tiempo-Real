@@ -1,3 +1,13 @@
+// Utilice el entorno ISIS para abrir el diseño del circuito que se encuentra en la carpeta 
+// “Samples\VSM for PICMICRO\VSM for PIC16\PIC Doorbell”. En este esquema se observa 
+// un microcontrolador PIC 16F84; dos pulsadores conectados a los pines RA0 y RA1 como 
+// entradas; dos leds conectados a los pines RB4 y RB5 como salidas. Configure el entorno 
+// y realice un programa C que permita encender y apagar los leds de manera alternada 
+// cada 250 milisegundos utilizando la función “__delay_ms”. Cuando inicia el programa 
+// ambos leds deben estar encendidos. Luego de presionar alguno de los pulsadores deben 
+// comenzar  a  titilar.  Nota:  Observe  en  la  barra  inferior  del  simulador  el  tiempo  de 
+// simulación para confirmar la precisión de la espera.  
+
 #include <htc.h>
 
 // constante requerida para funciones
