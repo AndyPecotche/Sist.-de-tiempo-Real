@@ -26,7 +26,7 @@ void main(){
     //OPTION_REG = 0b00000000; //valor final de OPTION_REG
 
     //INTCON = [GIE,PEIE,T0IE,INTE,RBIE,T0IF,INTF,RBIF]
-    GIE = 1; //-> Habilitar interrupciones generales (GlobalInterruptEnable): 
+    GIE = 0; //-> Habilitar interrupciones generales (GlobalInterruptEnable): 
             // 1 = Habilitar interrupciones generales
             // 0 = Deshabilitar interrupciones generales
 
@@ -34,7 +34,7 @@ void main(){
             // 1 = Habilitar interrupciones de periféricos
             // 0 = Deshabilitar interrupciones de periféricos //POR COPILOT
 
-    T0IE = 1; //-> Habilitación de interrupción por desborde del Timer0 (TMR0OverflowInterruptEnable):
+    T0IE = 0; //-> Habilitación de interrupción por desborde del Timer0 (TMR0OverflowInterruptEnable):
             // 1 = Habilitar interrupción por desborde del Timer0
             // 0 = Deshabilitar interrupción por desborde del Timer0
 
@@ -47,8 +47,8 @@ void main(){
             // 0 = Deshabilitar interrupción por cambio en RB4-RB7 //POR COPILOT
 
     T0IF = 0; //-> Bandera de desborde del Timer0 (TMR0OverflowInterruptFlag):
-            // 1 = 1 = El registro TMR0 ha desbordado (requiere limpiado por soft).
-            // 0 = 0 = El registro TMR0 no ha desbordado
+            // 1 = El registro TMR0 ha desbordado (requiere limpiado por soft).
+            // 0 = El registro TMR0 no ha desbordado
 
     //INTF = 0; //-> Bandera de interrupción por cambio en RB0/INT (ExternalInterruptFlag):
             // 1 = Cambio en RB0/INT
@@ -74,13 +74,12 @@ void main(){
     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
     TRISB = 0b11101111; //registro PORTB(RB4) como salida
     TRISA = 0b00000011; //registro PORTA(RA0,RA1) como entrada
-    contador = 0;
     while(1) {
         // Esperar hasta que se presione alguno de los pulsadores
         if (RA0 == 0 || RA1 == 0) {
             // Comenzar a titilar los LEDs de manera alternada cada 250 ms
             while(1) {
-                if ( T0IF = 1 ) {
+                if ( T0IF == 1 ) {
                     contador++;
                     T0IF = 0; //Limpiar bandera de desborde
                 }

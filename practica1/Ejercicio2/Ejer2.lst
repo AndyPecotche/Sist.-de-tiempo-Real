@@ -1,0 +1,93 @@
+     1: // Rehaga el ejercicio anterior conservando la misma funcionalidad pero modificando la 
+     2: // implementación. Utilice el módulo del Timer0 con el prescaler para controlar el tiempo 
+     3: // de espera y la interrupción para controlar el estado de los leds.
+     4: 
+     5: #include <htc.h>
+     6: 
+     7: // constante requerida para funciones
+     8: // de espera de tiempo
+     9: #define _XTAL_FREQ 1000000 //1MHz osc
+    10: int contador = 0;
+    11: void main(){
+    12:     //OPTION_REG = [-,-,T0CS,T0SE,PSA,PS2,PS1,PS0]
+    13:     T0CS = 0; //-> Bit de selección de reloj para incremento (TMR0ClockSourceSelect):
+    14:                 // 1 = reloj externo conectado a pin T0CKI (en este caso no importa el valor de T0SE)
+    15:                 // 0 = reloj interno asociado al ciclo de instrucción.
+    16:     T0SE = 0; //-> Bit de selección de flanco de transición (TMR0SourceEdgeSelect), 
+    17:                 //solo tiene sentido cuando la fuente es reloj externo (T0CS=1)
+    18:                 //1 = Incrementa en transición alto-bajo del pin T0CKI.
+    19:                 //0 = Incrementa en transición bajo-alto del pin T0CKI.
+    20:     PSA = 0; //-> Prescaler asignado a Timer0:
+    21:                 //1 = Prescaler asignado a Temporizador Watchdog
+    22:                 //0 = Prescaler asignado a módulo del Timer0. 
+    23:     PS2= 0;
+    24:     PS1= 0;
+    25:     PS0= 0;// -> PS2-PS0=0 -> Prescaler 1:2 = 1:2^(1+1)
+    26:     //OPTION_REG = 0b00000000; //valor final de OPTION_REG
+    27: 
+    28:     //INTCON = [GIE,PEIE,T0IE,INTE,RBIE,T0IF,INTF,RBIF]
+    29:     GIE = 0; //-> Habilitar interrupciones generales (GlobalInterruptEnable): 
+    30:             // 1 = Habilitar interrupciones generales
+    31:             // 0 = Deshabilitar interrupciones generales
+    32: 
+    33:     //PEIE = 0; //-> Habilitar interrupciones de periféricos
+    34:             // 1 = Habilitar interrupciones de periféricos
+    35:             // 0 = Deshabilitar interrupciones de periféricos //POR COPILOT
+    36: 
+    37:     T0IE = 0; //-> Habilitación de interrupción por desborde del Timer0 (TMR0OverflowInterruptEnable):
+    38:             // 1 = Habilitar interrupción por desborde del Timer0
+    39:             // 0 = Deshabilitar interrupción por desborde del Timer0
+    40: 
+    41:     //INTE = 0; //-> Habilitación de interrupción por cambio en RB0/INT (ExternalInterruptEnable):
+    42:             // 1 = Habilitar interrupción por cambio en RB0/INT
+    43:             // 0 = Deshabilitar interrupción por cambio en RB0/INT //POR COPILOT
+    44: 
+    45:     //RBIE = 0; //-> Habilitación de interrupción por cambio en RB4-RB7 (RBPortChangeInterruptEnable):
+    46:             // 1 = Habilitar interrupción por cambio en RB4-RB7
+    47:             // 0 = Deshabilitar interrupción por cambio en RB4-RB7 //POR COPILOT
+    48: 
+    49:     T0IF = 0; //-> Bandera de desborde del Timer0 (TMR0OverflowInterruptFlag):
+    50:             // 1 = El registro TMR0 ha desbordado (requiere limpiado por soft).
+    51:             // 0 = El registro TMR0 no ha desbordado
+    52: 
+    53:     //INTF = 0; //-> Bandera de interrupción por cambio en RB0/INT (ExternalInterruptFlag):
+    54:             // 1 = Cambio en RB0/INT
+    55:             // 0 = No ha ocurrido cambio en RB0/INT //POR COPILOT
+    56: 
+    57:     //RBIF = 0; //-> Bandera de interrupción por cambio en RB4-RB7 (RBPortChangeInterruptFlag):
+    58:             // 1 = Cambio en RB4-RB7
+    59:             // 0 = No ha ocurrido cambio en RB4-RB7 //POR COPILOT
+    60:     //INTCON = 0b10100000; //valor final de INTCON (alternativo a las asignaciones anteriores)
+    61: 
+    62:     //Velocidad Clock interno = 1MHz, ciclo de instrucción = 4 ciclos de reloj -> 250KHz -> 4us
+    63:     //Si por ejemplo Prescaler 1:64 -> 4us * 64 = 256us.
+    64:     //Si quiero que el desborde sea cada 250ms -> 250ms / 256us = 976.5625 -> 977 desbordes
+    65:     //256us * 977 = 249.792ms
+    66: 
+    67:     //Prescaler 1:2 -> 4us * 2 = 8us
+    68:     //Si quiero que el desborde sea cada 250ms -> 250ms / 8us = 31250 -> 31250 desbordes
+    69:     //8us * 31250 = 250ms mejor!!!!
+    70: 
+    71:     //PORTB = [RB7,RB6,RB5,RB4,RB3,RB2,RB1,RB0]
+    72:     //TRISB = [TRISB7,TRISB6,TRISB5,TRISB4,TRISB3,TRISB2,TRISB1,TRISB0]
+    73:     //PORTA = [-,-,RA5,RA4,RA3,RA2,RA1,RA0]
+    74:     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
+    75:     TRISB = 0b11101111; //registro PORTB(RB4) como salida
+    76:     TRISA = 0b00000011; //registro PORTA(RA0,RA1) como entrada
+    77:     while(1) {
+    78:         // Esperar hasta que se presione alguno de los pulsadores
+    79:         if (RA0 == 0 || RA1 == 0) {
+    80:             // Comenzar a titilar los LEDs de manera alternada cada 250 ms
+    81:             while(1) {
+    82:                 if ( T0IF == 1 ) {
+    83:                     contador++;
+    84:                     T0IF = 0; //Limpiar bandera de desborde
+    85:                 }
+    86:                 if (contador == 31250) {
+    87:                     PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
+    88:                     contador = 0;
+    89:                 }
+    90:             }
+    91:         }
+    92:     }
+    93: }
