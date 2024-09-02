@@ -95,11 +95,11 @@
 `uc 1 EEIF 1 0 :1:4 
 ]
 [u S262 . 1 `S256 1 . 1 0 ]
-"94 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"93 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
 [v F254 `(v  1 t 0 ]
 "14
 [v _main `(v  1 e 0 0 ]
-"94
+"93
 [v _isr `I(v  1 e 0 0 ]
 "3 bmul.c
 [v ___bmul `(uc  1 e 1 0 ]
@@ -344,9 +344,9 @@
 "14 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
 [v _main `(v  1 e 0 0 ]
 {
-"92
+"91
 } 0
-"94
+"93
 [v _isr `I(v  1 e 0 0 ]
 {
 "107

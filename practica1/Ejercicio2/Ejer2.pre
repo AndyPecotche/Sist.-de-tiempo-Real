@@ -293,7 +293,6 @@ T0IE = 1;
 # 76
 TRISB = 0b11101111;
 TRISA = 0b00000011;
-
 while(1) {
 
 TMR0 = 131;
@@ -310,16 +309,17 @@ flag1 = 0;
 }
 
 void interrupt isr(void) {
-GIE = 0;
+
 if (T0IF) {
 T0IF = 0;
-TMR0 = 141;
+TMR0 = 143;
 if (++contador == 250){
 flag1=1;
 contador = 0;
-
 }
 }
-GIE = 1;
-
+asm("nop");
+asm("nop");
+asm("nop");
+asm("nop");
 }

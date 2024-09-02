@@ -75,16 +75,15 @@ void main(){
     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
     TRISB = 0b11101111; //registro PORTB(RB4) como salida
     TRISA = 0b00000011; //registro PORTA(RA0,RA1) como entrada
-
     while(1) {
         // Esperar hasta que se presione alguno de los pulsadores
         TMR0 = 131; // Reiniciar Timer0 para que no se active la interrupción hasta oprimir
         if (RA0 == 0 || RA1 == 0) {
-            // Comenzar a titilar los LEDs de manera alternada cada 250 ms
+                // Comenzar a titilar los LEDs de manera alternada cada 250 ms
                 while(1) {
                         if (flag1 == 1) {
-                            PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
-                            flag1 = 0;
+                                PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
+                                flag1 = 0;
                         }
                 }
         }
@@ -92,16 +91,18 @@ void main(){
 }
 
 void interrupt isr(void) {
-        GIE = 0; //deshabilito interrupciones
+        // GIE = 0; //Esto es implicito! no es necesario escribirlo
         if (T0IF) { // Verificar si la interrupción es por desbordamiento del Timer0
-                 T0IF = 0; // Limpiar el flag de interrupción del Timer0
-                 TMR0 = 139; // reiniciar contador registro timer0
+                T0IF = 0; // Limpiar el flag de interrupción del Timer0
+                TMR0 = 143; // reiniciar contador registro timer0
+                //el valor teorico era 131, pero se necesita un ajuste para que sea exacto por las lineas de codigo
                 if (++contador == 250){
                         flag1=1;
                         contador = 0;
-                        //PORTB = PORTB ^ 0b00010000; // Cambiar estado de RB4 y RB5
                 }
         }
-        GIE = 1; //habilito interrupciones
-        
+        asm("nop"); //Con estas lineas queda en 250ms clavado (cada 2 nop es +1 en tmr0)
+        asm("nop");
+        asm("nop");
+        asm("nop");
 }

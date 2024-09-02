@@ -46,9 +46,9 @@ pclath	equ	10
 	global	_contador
 	global	_flag1
 	global	_PORTB
-psect	maintext,global,class=CODE,delta=2
-global __pmaintext
-__pmaintext:
+psect	text113,local,class=CODE,delta=2
+global __ptext113
+__ptext113:
 _PORTB	set	6
 	global	_TMR0
 _TMR0	set	1
@@ -197,7 +197,9 @@ __pcstackBANK0:
 ;;DATA                 0      0       8       6        0.0%
 
 	global	_main
-psect	maintext
+psect	maintext,global,class=CODE,delta=2
+global __pmaintext
+__pmaintext:
 
 ;; *************** function _main *****************
 ;; Defined at:
@@ -238,7 +240,7 @@ _main:
 ; Regs used in _main: [wreg+status,2]
 	line	16
 	
-l1347:	
+l1353:	
 	bsf	status, 5	;RP0=1, select bank1
 	bcf	(1037/8)^080h,(1037)&7
 	line	19
@@ -257,46 +259,46 @@ l1347:
 	bsf	(93/8),(93)&7
 	line	76
 	
-l1349:	
+l1355:	
 	movlw	(0EFh)
 	movwf	(134)^080h	;volatile
 	line	77
 	movlw	(03h)
 	movwf	(133)^080h	;volatile
-	line	79
+	line	78
 	
 l171:	
-	line	81
+	line	80
 	movlw	(083h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(1)	;volatile
-	line	82
+	line	81
 	
-l1351:	
+l1357:	
 	btfss	(40/8),(40)&7
 	goto	u2191
 	goto	u2190
 u2191:
-	goto	l1355
+	goto	l1361
 u2190:
 	
-l1353:	
+l1359:	
 	btfsc	(41/8),(41)&7
 	goto	u2201
 	goto	u2200
 u2201:
 	goto	l171
 u2200:
-	goto	l1355
+	goto	l1361
 	
 l174:	
-	goto	l1355
-	line	84
+	goto	l1361
+	line	83
 	
 l175:	
-	line	85
+	line	84
 	
-l1355:	
+l1361:	
 	movlw	01h
 	xorwf	(_flag1),w
 	iorwf	(_flag1+1),w
@@ -304,44 +306,44 @@ l1355:
 	goto	u2211
 	goto	u2210
 u2211:
-	goto	l1355
+	goto	l1361
 u2210:
-	line	86
+	line	85
 	
-l1357:	
+l1363:	
 	movf	(6),w	;volatile
 	xorlw	010h
 	movwf	(6)	;volatile
-	line	87
+	line	86
 	
-l1359:	
+l1365:	
 	clrf	(_flag1)
 	clrf	(_flag1+1)
-	goto	l1355
-	line	88
+	goto	l1361
+	line	87
 	
 l176:	
-	goto	l1355
-	line	89
+	goto	l1361
+	line	88
 	
 l177:	
-	line	84
-	goto	l1355
+	line	83
+	goto	l1361
 	
 l178:	
 	goto	l171
-	line	90
+	line	89
 	
 l172:	
 	goto	l171
-	line	91
+	line	90
 	
 l179:	
-	line	79
+	line	78
 	goto	l171
 	
 l180:	
-	line	92
+	line	91
 	
 l181:	
 	global	start
@@ -353,13 +355,13 @@ GLOBAL	__end_of_main
 
 	signat	_main,88
 	global	_isr
-psect	text108,local,class=CODE,delta=2
-global __ptext108
-__ptext108:
+psect	text114,local,class=CODE,delta=2
+global __ptext114
+__ptext114:
 
 ;; *************** function _isr *****************
 ;; Defined at:
-;;		line 94 in file "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+;;		line 93 in file "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -385,9 +387,9 @@ __ptext108:
 ;;		Interrupt level 1
 ;; This function uses a non-reentrant model
 ;;
-psect	text108
+psect	text114
 	file	"..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
-	line	94
+	line	93
 	global	__size_of_isr
 	__size_of_isr	equ	__end_of_isr-_isr
 	
@@ -412,28 +414,26 @@ interrupt_function:
 	movf	btemp+1,w
 	movwf	(??_isr+3)
 	ljmp	_isr
-psect	text108
+psect	text114
 	line	95
 	
-i1l1361:	
-	bcf	(95/8),(95)&7
-	line	96
+i1l1367:	
 	btfss	(90/8),(90)&7
 	goto	u222_21
 	goto	u222_20
 u222_21:
-	goto	i1l1371
+	goto	i1l1377
 u222_20:
+	line	96
+	
+i1l1369:	
+	bcf	(90/8),(90)&7
 	line	97
 	
-i1l1363:	
-	bcf	(90/8),(90)&7
-	line	98
-	
-i1l1365:	
-	movlw	(08Dh)
+i1l1371:	
+	movlw	(08Fh)
 	movwf	(1)	;volatile
-	line	99
+	line	98
 	movlw	low(01h)
 	addwf	(_contador),f
 	skipnc
@@ -447,35 +447,56 @@ i1l1365:
 	goto	u223_21
 	goto	u223_20
 u223_21:
-	goto	i1l1371
+	goto	i1l1377
 u223_20:
-	line	100
+	line	99
 	
-i1l1367:	
+i1l1373:	
 	movlw	low(01h)
 	movwf	(_flag1)
 	movlw	high(01h)
 	movwf	((_flag1))+1
-	line	101
+	line	100
 	
-i1l1369:	
+i1l1375:	
 	clrf	(_contador)
 	clrf	(_contador+1)
-	goto	i1l1371
-	line	103
+	goto	i1l1377
+	line	101
 	
 i1l185:	
-	goto	i1l1371
-	line	104
+	goto	i1l1377
+	line	102
 	
 i1l184:	
+	line	103
+	
+i1l1377:	
+# 103 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+nop ;#
+psect	text114
+	line	104
+	
+i1l1379:	
+# 104 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+nop ;#
+psect	text114
 	line	105
 	
-i1l1371:	
-	bsf	(95/8),(95)&7
+i1l1381:	
+# 105 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+nop ;#
+psect	text114
+	line	106
+	
+i1l1383:	
+# 106 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+nop ;#
+psect	text114
 	line	107
 	
 i1l186:	
+	bcf	status, 5	;RP0=0, select bank0
 	movf	(??_isr+3),w
 	movwf	btemp+1
 	movf	(??_isr+2),w
@@ -493,9 +514,9 @@ GLOBAL	__end_of_isr
 ;; =============== function _isr ends ============
 
 	signat	_isr,88
-psect	text109,local,class=CODE,delta=2
-global __ptext109
-__ptext109:
+psect	text115,local,class=CODE,delta=2
+global __ptext115
+__ptext115:
 	global	btemp
 	btemp set 04Eh
 

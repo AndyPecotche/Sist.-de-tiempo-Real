@@ -3,7 +3,7 @@ _RA1 29 0 ABS
 _PS0 408 0 ABS
 _PS1 409 0 ABS
 _PS2 40A 0 ABS
-__S0 6C 0 ABS
+__S0 6F 0 ABS
 __S1 14 0 ABS
 __S2 0 0 ABS
 _GIE 5F 0 ABS
@@ -49,8 +49,11 @@ __Hsfr0 0 0 ABS
 __Lsfr0 0 0 ABS
 __Hsfr1 0 0 ABS
 __Lsfr1 0 0 ABS
+__ptext113 0 0 CODE
+__ptext114 3D 0 CODE
 __Hcode 0 0 ABS
 __Lcode 0 0 ABS
+__ptext115 0 0 CODE
 ??_main 0 0 COMMON
 __HcstackBANK0 0 0 ABS
 __LcstackBANK0 0 0 ABS
@@ -59,11 +62,9 @@ saved_w 4E 0 ABS
 __Hinit F 0 CODE
 __Linit F 0 CODE
 __end_of_main 3D 0 CODE
-__ptext108 3D 0 CODE
 __Htext 0 0 ABS
 __Ltext 0 0 ABS
-__ptext109 0 0 CODE
-end_of_initialization 6A 0 CODE
+end_of_initialization 6D 0 CODE
 __Hstrings 0 0 ABS
 __Lstrings 0 0 ABS
 __Hbank0 0 0 ABS
@@ -76,7 +77,7 @@ __Hclrtext 0 0 ABS
 __Lclrtext 0 0 ABS
 __Hidloc 0 0 IDLOC
 __Lidloc 0 0 IDLOC
-__end_of_isr 66 0 CODE
+__end_of_isr 69 0 CODE
 __Hcinit 0 0 ABS
 __Lcinit 0 0 ABS
 __size_of_main 0 0 ABS
@@ -96,13 +97,13 @@ intlevel5 0 0 CODE
 __HcstackCOMMON 0 0 ABS
 __LcstackCOMMON 0 0 ABS
 __pcstackCOMMON 0 0 COMMON
-start_initialization 66 0 CODE
+start_initialization 69 0 CODE
 __Hmaintext 0 0 ABS
 __Lmaintext 0 0 ABS
 __pmaintext 10 0 CODE
 %segments
 reset_vec 0 1 CODE 0
-intentry 8 D7 CODE 8
+intentry 8 DD CODE 8
 bssBANK0 C 13 BANK0 C
 %locals
 C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\startup.obj
@@ -110,6 +111,13 @@ C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\startup.as
 59 0 0 CODE
 68 F 0 CODE
 C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.obj
+C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.as
+98 69 0 CODE
+99 6A 0 CODE
+100 6B 0 CODE
+101 6C 0 CODE
+108 6D 0 CODE
+109 6E 0 CODE
 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
 16 10 0 CODE
 19 12 0 CODE
@@ -121,32 +129,26 @@ C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.obj
 40 18 0 CODE
 76 19 0 CODE
 77 1B 0 CODE
-81 1D 0 CODE
-82 20 0 CODE
-85 2A 0 CODE
-86 31 0 CODE
-87 34 0 CODE
-88 37 0 CODE
-84 38 0 CODE
-90 3A 0 CODE
-79 3B 0 CODE
-92 3C 0 CODE
-C:\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.as
-98 66 0 CODE
-99 67 0 CODE
-100 68 0 CODE
-101 69 0 CODE
-108 6A 0 CODE
-109 6B 0 CODE
-..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+80 1D 0 CODE
+81 20 0 CODE
+84 2A 0 CODE
+85 31 0 CODE
+86 34 0 CODE
+87 37 0 CODE
+83 38 0 CODE
+89 3A 0 CODE
+78 3B 0 CODE
+91 3C 0 CODE
 95 3D 0 CODE
-96 3E 0 CODE
+96 41 0 CODE
 97 42 0 CODE
-98 43 0 CODE
-99 45 0 CODE
-100 52 0 CODE
-101 56 0 CODE
+98 44 0 CODE
+99 51 0 CODE
+100 55 0 CODE
+101 58 0 CODE
 103 59 0 CODE
-105 5A 0 CODE
-107 5B 0 CODE
-94 4 0 CODE
+104 5A 0 CODE
+105 5B 0 CODE
+106 5C 0 CODE
+107 5D 0 CODE
+93 4 0 CODE

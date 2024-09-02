@@ -75,33 +75,33 @@
     75:     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
     76:     TRISB = 0b11101111; //registro PORTB(RB4) como salida
     77:     TRISA = 0b00000011; //registro PORTA(RA0,RA1) como entrada
-    78: 
-    79:     while(1) {
-    80:         // Esperar hasta que se presione alguno de los pulsadores
-    81:         TMR0 = 131; // Reiniciar Timer0 para que no se active la interrupción hasta oprimir
-    82:         if (RA0 == 0 || RA1 == 0) {
-    83:             // Comenzar a titilar los LEDs de manera alternada cada 250 ms
-    84:                 while(1) {
-    85:                         if (flag1 == 1) {
-    86:                             PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
-    87:                             flag1 = 0;
-    88:                         }
-    89:                 }
-    90:         }
-    91:     }
-    92: }
-    93: 
-    94: void interrupt isr(void) {
-    95:         GIE = 0; //deshabilito interrupciones
-    96:         if (T0IF) { // Verificar si la interrupción es por desbordamiento del Timer0
-    97:                  T0IF = 0; // Limpiar el flag de interrupción del Timer0
-    98:                  TMR0 = 141; // reiniciar contador registro timer0
-    99:                 if (++contador == 250){
-   100:                         flag1=1;
-   101:                         contador = 0;
-   102:                         //PORTB = PORTB ^ 0b00010000; // Cambiar estado de RB4 y RB5
-   103:                 }
-   104:         }
-   105:         GIE = 1; //habilito interrupciones
-   106:         
+    78:     while(1) {
+    79:         // Esperar hasta que se presione alguno de los pulsadores
+    80:         TMR0 = 131; // Reiniciar Timer0 para que no se active la interrupción hasta oprimir
+    81:         if (RA0 == 0 || RA1 == 0) {
+    82:                 // Comenzar a titilar los LEDs de manera alternada cada 250 ms
+    83:                 while(1) {
+    84:                         if (flag1 == 1) {
+    85:                                 PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
+    86:                                 flag1 = 0;
+    87:                         }
+    88:                 }
+    89:         }
+    90:     }
+    91: }
+    92: 
+    93: void interrupt isr(void) {
+    94:         // GIE = 0; //Esto es implicito! no es necesario escribirlo
+    95:         if (T0IF) { // Verificar si la interrupción es por desbordamiento del Timer0
+    96:                 T0IF = 0; // Limpiar el flag de interrupción del Timer0
+    97:                 TMR0 = 143; // reiniciar contador registro timer0
+    98:                 if (++contador == 250){
+    99:                         flag1=1;
+   100:                         contador = 0;
+   101:                 }
+   102:         }
+   103:         asm("nop");
+   104:         asm("nop");
+   105:         asm("nop");
+   106:         asm("nop");
    107: }
