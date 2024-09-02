@@ -263,8 +263,10 @@ extern unsigned char eeprom_read(unsigned char addr);
 #pragma inline(_delay)
 extern void _delay(unsigned long);
 
-# 10 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+# 11 "..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c"
+int flag1 = 0;
 int contador = 0;
+
 void main(){
 
 T0CS = 0;
@@ -283,31 +285,41 @@ PS0= 0;
 
 
 
-GIE = 0;
+GIE = 1;
 
-# 37
-T0IE = 0;
+# 40
+T0IE = 1;
 
-# 49
-T0IF = 0;
-
-# 75
+# 76
 TRISB = 0b11101111;
 TRISA = 0b00000011;
+
 while(1) {
 
+TMR0 = 131;
 if (RA0 == 0 || RA1 == 0) {
 
 while(1) {
-if ( T0IF == 1 ) {
-contador++;
-T0IF = 0;
-}
-if (contador == 31250) {
+if (flag1 == 1) {
 PORTB = PORTB ^ 0b00010000;
+flag1 = 0;
+}
+}
+}
+}
+}
+
+void interrupt isr(void) {
+GIE = 0;
+if (T0IF) {
+T0IF = 0;
+TMR0 = 141;
+if (++contador == 250){
+flag1=1;
 contador = 0;
+
 }
 }
-}
-}
+GIE = 1;
+
 }

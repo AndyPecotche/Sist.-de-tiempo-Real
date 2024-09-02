@@ -95,8 +95,12 @@
 `uc 1 EEIF 1 0 :1:4 
 ]
 [u S262 . 1 `S256 1 . 1 0 ]
-"11 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"94 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+[v F254 `(v  1 t 0 ]
+"14
 [v _main `(v  1 e 0 0 ]
+"94
+[v _isr `I(v  1 e 0 0 ]
 "3 bmul.c
 [v ___bmul `(uc  1 e 1 0 ]
 "5 C:\PROGRA~2\HI-TEC~1\PICC\9.81\sources\abdiv.c
@@ -169,7 +173,9 @@
 [v ___tmul `(um  1 e 3 0 ]
 "3 C:\PROGRA~2\HI-TEC~1\PICC\9.81\sources\wmul.c
 [v ___wmul `(ui  1 e 2 0 ]
-"10 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"11 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+[v _flag1 `i  1 e 2 0 ]
+"12
 [v _contador `i  1 e 2 0 ]
 "53 C:\PROGRA~2\HI-TEC~1\PICC\9.81\include\pic16f84a.h
 [v _INDF `Vuc  1 e 1 @0 ]
@@ -335,8 +341,13 @@
 [v _EECON1bits `VS72  1 e 1 @136 ]
 "298
 [v _EECON2 `Vuc  1 e 1 @137 ]
-"11 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"14 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
 [v _main `(v  1 e 0 0 ]
 {
-"93
+"92
+} 0
+"94
+[v _isr `I(v  1 e 0 0 ]
+{
+"107
 } 0

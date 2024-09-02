@@ -1,7 +1,7 @@
 
 
 HI-TECH Software PIC Macro Assembler V9.81 build 7503 
-                                                                                                           Wed Aug 28 00:05:09 2024
+                                                                                                           Sun Sep 01 21:35:07 2024
 
 
      1                           
@@ -60,20 +60,24 @@ HI-TECH Software PIC Macro Assembler V9.81 build 7503
     53                           	psect	reset_vec
     54  0000                     reset_vec:
     55                           	; No powerup routine
-    56                           	; No interrupt routine
+    56                           	global start
     57                           
-    58                           
-    59                           	psect	init
-    60  0000                     start
-    61  0000                     _exit
-    62                           	psect	end_init
-    63                           	global start_initialization
-    64  0000  2BC2               	ljmp start_initialization	;jump to C runtime clear & initialization
+    58                           ; jump to start
+    59  0000  280F               	goto	start & 0x7FF | (reset_vec & not 0x7FF)
+    60                           
+    61                           
+    62                           
+    63                           	psect	init
+    64  000F                     start
+    65  000F                     _exit
+    66                           	psect	end_init
+    67                           	global start_initialization
+    68  000F  2866               	ljmp start_initialization	;jump to C runtime clear & initialization
 
 
 HI-TECH Software PICC Macro Assembler V9.81 build 7503 
-Symbol Table                                                                                               Wed Aug 28 00:05:09 2024
+Symbol Table                                                                                               Sun Sep 01 21:35:07 2024
 
-               _main 03C6                 _exit 0000                 start 0000  start_initialization 03C2  
+               _main 0010                 _exit 000F                 start 000F  start_initialization 0066  
            intlevel0 0000             intlevel1 0000             intlevel2 0000             intlevel3 0000  
            intlevel4 0000             intlevel5 0000             reset_vec 0000  

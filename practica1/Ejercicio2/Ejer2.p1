@@ -205,84 +205,113 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _EECON1bits `VS20 1 e@136 ]
 "298 C:\PROGRA~2\HI-TEC~1\PICC\9.81\include\pic16f84a.h
 [v _EECON2 `Vuc 1 e@137 ]
-"10 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"11 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+[v _flag1 `i 1 e ]
+"12 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
 [v _contador `i 1 e ]
 [p mainexit ]
-"10 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+"11 ..\..\..\..\..\..\..\Users\windows\Documents\Sist. de tiempo real\practica1\Ejercicio2\Ejer2.c
+[i _flag1
+-> 0 `i
+]
+"12
 [i _contador
 -> 0 `i
 ]
-"11
+"14
 [v _main `(v 1 ef ]
 {
 [e :U _main ]
 [f ]
-"13
-[e = _T0CS -> -> 0 `i `b ]
 "16
+[e = _T0CS -> -> 0 `i `b ]
+"19
 [e = _T0SE -> -> 0 `i `b ]
-"20
-[e = _PSA -> -> 0 `i `b ]
 "23
+[e = _PSA -> -> 0 `i `b ]
+"26
 [e = _PS2 -> -> 0 `i `b ]
-"24
+"27
 [e = _PS1 -> -> 0 `i `b ]
-"25
+"28
 [e = _PS0 -> -> 0 `i `b ]
-"29
-[e = _GIE -> -> 0 `i `b ]
-"37
-[e = _T0IE -> -> 0 `i `b ]
-"49
-[e = _T0IF -> -> 0 `i `b ]
-"75
-[e = _TRISB -> -> 239 `i `uc ]
+"32
+[e = _GIE -> -> 1 `i `b ]
+"40
+[e = _T0IE -> -> 1 `i `b ]
 "76
-[e = _TRISA -> -> 3 `i `uc ]
+[e = _TRISB -> -> 239 `i `uc ]
 "77
+[e = _TRISA -> -> 3 `i `uc ]
+"79
 [e :U 24 ]
 {
-"79
+"81
+[e = _TMR0 -> -> 131 `i `uc ]
+"82
 [e $ ! || == -> _RA0 `i -> 0 `i == -> _RA1 `i -> 0 `i 26  ]
 {
-"81
+"84
 [e :U 28 ]
 {
-"82
-[e $ ! == -> _T0IF `i -> 1 `i 30  ]
-{
-"83
-[e ++ _contador -> 1 `i ]
-"84
-[e = _T0IF -> -> 0 `i `b ]
 "85
+[e $ ! == _flag1 -> 1 `i 30  ]
+{
+"86
+[e = _PORTB -> ^ -> _PORTB `i -> 16 `i `uc ]
+"87
+[e = _flag1 -> 0 `i ]
+"88
 }
 [e :U 30 ]
-"86
-[e $ ! == _contador -> 31250 `i 31  ]
-{
-"87
-[e = _PORTB -> ^ -> _PORTB `i -> 16 `i `uc ]
-"88
-[e = _contador -> 0 `i ]
 "89
 }
-[e :U 31 ]
-"90
-}
 [e :U 27 ]
-"81
+"84
 [e $U 28  ]
 [e :U 29 ]
-"91
+"90
 }
 [e :U 26 ]
-"92
+"91
 }
 [e :U 23 ]
-"77
+"79
 [e $U 24  ]
 [e :U 25 ]
-"93
+"92
 [e :UE 22 ]
+}
+"94
+[v F254 `(v 1 tf ]
+[v _isr `IF254 1 e ]
+{
+[e :U _isr ]
+[f ]
+"95
+[e = _GIE -> -> 0 `i `b ]
+"96
+[e $ ! _T0IF 32  ]
+{
+"97
+[e = _T0IF -> -> 0 `i `b ]
+"98
+[e = _TMR0 -> -> 141 `i `uc ]
+"99
+[e $ ! == =+ _contador -> 1 `i -> 250 `i 33  ]
+{
+"100
+[e = _flag1 -> 1 `i ]
+"101
+[e = _contador -> 0 `i ]
+"103
+}
+[e :U 33 ]
+"104
+}
+[e :U 32 ]
+"105
+[e = _GIE -> -> 1 `i `b ]
+"107
+[e :UE 31 ]
 }

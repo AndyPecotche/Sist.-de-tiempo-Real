@@ -6,8 +6,11 @@
 
 // constante requerida para funciones
 // de espera de tiempo
-#define _XTAL_FREQ 1000000 //1MHz osc
+#define _XTAL_FREQ 1000000 //1MHz oscilador interno
+
+int flag1 = 0;
 int contador = 0;
+
 void main(){
     //OPTION_REG = [-,-,T0CS,T0SE,PSA,PS2,PS1,PS0]
     T0CS = 0; //-> Bit de selección de reloj para incremento (TMR0ClockSourceSelect):
@@ -26,7 +29,7 @@ void main(){
     //OPTION_REG = 0b00000000; //valor final de OPTION_REG
 
     //INTCON = [GIE,PEIE,T0IE,INTE,RBIE,T0IF,INTF,RBIF]
-    GIE = 0; //-> Habilitar interrupciones generales (GlobalInterruptEnable): 
+    GIE = 1; //-> Habilitar interrupciones generales (GlobalInterruptEnable): 
             // 1 = Habilitar interrupciones generales
             // 0 = Deshabilitar interrupciones generales
 
@@ -34,7 +37,7 @@ void main(){
             // 1 = Habilitar interrupciones de periféricos
             // 0 = Deshabilitar interrupciones de periféricos //POR COPILOT
 
-    T0IE = 0; //-> Habilitación de interrupción por desborde del Timer0 (TMR0OverflowInterruptEnable):
+    T0IE = 1; //-> Habilitación de interrupción por desborde del Timer0 (TMR0OverflowInterruptEnable):
             // 1 = Habilitar interrupción por desborde del Timer0
             // 0 = Deshabilitar interrupción por desborde del Timer0
 
@@ -46,7 +49,7 @@ void main(){
             // 1 = Habilitar interrupción por cambio en RB4-RB7
             // 0 = Deshabilitar interrupción por cambio en RB4-RB7 //POR COPILOT
 
-    T0IF = 0; //-> Bandera de desborde del Timer0 (TMR0OverflowInterruptFlag):
+    //T0IF = 0; //-> Bandera de desborde del Timer0 (TMR0OverflowInterruptFlag):
             // 1 = El registro TMR0 ha desbordado (requiere limpiado por soft).
             // 0 = El registro TMR0 no ha desbordado
 
@@ -60,13 +63,11 @@ void main(){
     //INTCON = 0b10100000; //valor final de INTCON (alternativo a las asignaciones anteriores)
 
     //Velocidad Clock interno = 1MHz, ciclo de instrucción = 4 ciclos de reloj -> 250KHz -> 4us
-    //Si por ejemplo Prescaler 1:64 -> 4us * 64 = 256us.
-    //Si quiero que el desborde sea cada 250ms -> 250ms / 256us = 976.5625 -> 977 desbordes
-    //256us * 977 = 249.792ms
-
-    //Prescaler 1:2 -> 4us * 2 = 8us
-    //Si quiero que el desborde sea cada 250ms -> 250ms / 8us = 31250 -> 31250 desbordes
-    //8us * 31250 = 250ms mejor!!!!
+    //Si por ejemplo Prescaler 1:2 -> 4us * 2 = 8us.
+    //TMR0 = 256 - 131 = 125 --> Inicializo TMR0 en 131 para que desborde con 125 ciclos: 125 * 8us = 1ms
+    //Cada 1ms se desborda el Timer0 y se llama a interrupcion
+    //Si quiero que el desborde sea cada 250ms -> 250ms / 1ms = 250 -> 250 desbordes
+    //1ms * 250 = 250ms 
 
     //PORTB = [RB7,RB6,RB5,RB4,RB3,RB2,RB1,RB0]
     //TRISB = [TRISB7,TRISB6,TRISB5,TRISB4,TRISB3,TRISB2,TRISB1,TRISB0]
@@ -74,20 +75,33 @@ void main(){
     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
     TRISB = 0b11101111; //registro PORTB(RB4) como salida
     TRISA = 0b00000011; //registro PORTA(RA0,RA1) como entrada
+
     while(1) {
         // Esperar hasta que se presione alguno de los pulsadores
+        TMR0 = 131; // Reiniciar Timer0 para que no se active la interrupción hasta oprimir
         if (RA0 == 0 || RA1 == 0) {
             // Comenzar a titilar los LEDs de manera alternada cada 250 ms
-            while(1) {
-                if ( T0IF == 1 ) {
-                    contador++;
-                    T0IF = 0; //Limpiar bandera de desborde
+                while(1) {
+                        if (flag1 == 1) {
+                            PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
+                            flag1 = 0;
+                        }
                 }
-                if (contador == 31250) {
-                    PORTB = PORTB ^ 0b00010000; // Alternar los LEDs RB4 y RB5
-                    contador = 0;
-                }
-            }
         }
     }
+}
+
+void interrupt isr(void) {
+        GIE = 0; //deshabilito interrupciones
+        if (T0IF) { // Verificar si la interrupción es por desbordamiento del Timer0
+                 T0IF = 0; // Limpiar el flag de interrupción del Timer0
+                 TMR0 = 139; // reiniciar contador registro timer0
+                if (++contador == 250){
+                        flag1=1;
+                        contador = 0;
+                        //PORTB = PORTB ^ 0b00010000; // Cambiar estado de RB4 y RB5
+                }
+        }
+        GIE = 1; //habilito interrupciones
+        
 }
