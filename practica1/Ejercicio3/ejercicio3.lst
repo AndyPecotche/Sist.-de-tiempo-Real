@@ -38,7 +38,7 @@
     38:     //RD7 --> LE de latch2 74LS373
     39: 
     40: //--------------------Configuracion de los pines analogicos ADCON1--------------------
-    41:     ADCON1 = 0b10001110; 
+    41:     ADCON1 = 0b10001111; 
     42:     /*
     43:     ADCON1 = [ADFM,-,-,-,PCFG3,PCFG2,PCFG1,PCFG0]
     44:     PCFGx = 0bxxxx1110 --> AN0 como entrada analogica, Vref+ = VDD, Vref- = VSS
@@ -101,14 +101,16 @@
    101: 
    102:         // Mostrar el resultado en los displays de 7 segmentos (multiplexado)
    103:         // Mostrar el valor en el latch controlado por RD6 (displays menos significativos)
-   104:         RD6 = 1; // Habilitar latch 2
-   105:         PORTB = valor & 0xFF; // Enviar los bits menos significativos a PORTB
-   106:         RD6 = 0; // Deshabilitar latch 2
-   107:         
-   108:         // Mostrar el valor en el latch controlado por RD7 (displays más significativos)
-   109:         RD7 = 1; // Habilitar latch 1
-   110:         PORTB = (valor >> 8) & 0xFF; // Enviar los bits más significativos a PORTB
-   111:         RD7 = 0; // Deshabilitar latch 1
-   112:     }
-   113: 
-   114: }
+   104:         PORTB = valor & 0xFF; // Mostrar el valor en los displays 
+   105:                               // El & 0xFF es para que solo se asignen los 8 bits menos significativos
+   106:                               // pero igual funciona sin el & 0xFF
+   107:         RD6 = 1; // Habilitar latch U2 (escribir valor) (displays menos significativos)
+   108:         RD6 = 0; // Deshabilitar latch 2
+   109:         
+   110:         // Mostrar el valor en el latch controlado por RD7 (displays más significativos)
+   111:         PORTB = (valor >> 8) & 0xFF; // Desplazar el valor 8 bits a la derecha (Se desbordan los 8 menos significativos ya cargados al display)
+   112:         RD7 = 1; // Habilitar latch U3 (displays más significativos)
+   113:         RD7 = 0; // Deshabilitar latch 1
+   114:     }
+   115: 
+   116: }

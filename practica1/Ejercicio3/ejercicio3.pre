@@ -1042,7 +1042,7 @@ TRISD = 0b00000000;
 
 
 
-ADCON1 = 0b10001110;
+ADCON1 = 0b10001111;
 
 # 56
 ADCON0 = 0b01000001;
@@ -1064,13 +1064,15 @@ unsigned int valor = (ADRESH << 8) | ADRESL;
 
 
 
-RD6 = 1;
 PORTB = valor & 0xFF;
+
+
+RD6 = 1;
 RD6 = 0;
 
 
-RD7 = 1;
 PORTB = (valor >> 8) & 0xFF;
+RD7 = 1;
 RD7 = 0;
 }
 

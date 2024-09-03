@@ -232,7 +232,7 @@ l1018:
 l1020:	
 	clrf	(136)^080h	;volatile
 	line	41
-	movlw	(08Eh)
+	movlw	(08Fh)
 	movwf	(159)^080h	;volatile
 	line	56
 	movlw	(041h)
@@ -299,38 +299,38 @@ l1028:
 	line	104
 	
 l1030:	
-	bsf	(70/8),(70)&7
-	line	105
-	
-l1032:	
 	movf	(main@valor),w
 	movwf	(6)	;volatile
-	line	106
+	line	107
+	
+l1032:	
+	bsf	(70/8),(70)&7
+	line	108
 	
 l1034:	
 	bcf	(70/8),(70)&7
-	line	109
+	line	111
 	
 l1036:	
-	bsf	(71/8),(71)&7
-	line	110
-	
-l1038:	
 	movf	(main@valor+1),w
 	movwf	(6)	;volatile
-	line	111
+	line	112
+	
+l1038:	
+	bsf	(71/8),(71)&7
+	line	113
 	
 l1040:	
 	bcf	(71/8),(71)&7
 	goto	l1026
-	line	112
+	line	114
 	
 l645:	
 	line	94
 	goto	l1026
 	
 l646:	
-	line	114
+	line	116
 	
 l647:	
 	global	start

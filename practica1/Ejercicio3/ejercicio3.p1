@@ -840,7 +840,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "36
 [e = _TRISD -> -> 0 `i `uc ]
 "41
-[e = _ADCON1 -> -> 142 `i `uc ]
+[e = _ADCON1 -> -> 143 `i `uc ]
 "56
 [e = _ADCON0 -> -> 65 `i `uc ]
 "79
@@ -864,23 +864,23 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _valor `ui 1 a ]
 [e = _valor -> | << -> _ADRESH `i -> 8 `i -> _ADRESL `i `ui ]
 "104
-[e = _RD6 -> -> 1 `i `b ]
-"105
 [e = _PORTB -> & _valor -> -> 255 `i `ui `uc ]
-"106
+"107
+[e = _RD6 -> -> 1 `i `b ]
+"108
 [e = _RD6 -> -> 0 `i `b ]
-"109
-[e = _RD7 -> -> 1 `i `b ]
-"110
-[e = _PORTB -> & >> _valor -> 8 `i -> -> 255 `i `ui `uc ]
 "111
-[e = _RD7 -> -> 0 `i `b ]
+[e = _PORTB -> & >> _valor -> 8 `i -> -> 255 `i `ui `uc ]
 "112
+[e = _RD7 -> -> 1 `i `b ]
+"113
+[e = _RD7 -> -> 0 `i `b ]
+"114
 }
 [e :U 97 ]
 "94
 [e $U 98  ]
 [e :U 99 ]
-"114
+"116
 [e :UE 96 ]
 }

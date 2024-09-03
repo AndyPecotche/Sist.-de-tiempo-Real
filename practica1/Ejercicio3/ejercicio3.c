@@ -101,13 +101,15 @@ void main(){
 
         // Mostrar el resultado en los displays de 7 segmentos (multiplexado)
         // Mostrar el valor en el latch controlado por RD6 (displays menos significativos)
-        RD6 = 1; // Habilitar latch 2
-        PORTB = valor & 0xFF; // Enviar los bits menos significativos a PORTB
+        PORTB = valor & 0xFF; // Mostrar el valor en los displays 
+                              // El & 0xFF es para que solo se asignen los 8 bits menos significativos
+                              // pero igual funciona sin el & 0xFF
+        RD6 = 1; // Habilitar latch U2 (escribir valor) (displays menos significativos)
         RD6 = 0; // Deshabilitar latch 2
         
         // Mostrar el valor en el latch controlado por RD7 (displays más significativos)
-        RD7 = 1; // Habilitar latch 1
-        PORTB = (valor >> 8) & 0xFF; // Enviar los bits más significativos a PORTB
+        PORTB = (valor >> 8) & 0xFF; // Desplazar el valor 8 bits a la derecha (Se desbordan los 8 menos significativos ya cargados al display)
+        RD7 = 1; // Habilitar latch U3 (displays más significativos)
         RD7 = 0; // Deshabilitar latch 1
     }
 
