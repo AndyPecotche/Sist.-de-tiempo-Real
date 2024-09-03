@@ -33,17 +33,17 @@ void main(){
 
     //PORTD = [-,-,-,-,-,-,RD1,RD0]
     //TRISD = [-,-,-,-,-,-,TRISD1,TRISD0]
-    TRISD = 0b11000000; //registro PORTD(RD6,RD7) como salida
+    TRISD = 0b00000000; //registro PORTD(RD6,RD7) como salida
     //RD6 --> LE de latch1 74LS373
     //RD7 --> LE de latch2 74LS373
 
 //--------------------Configuracion de los pines analogicos ADCON1--------------------
-    ADCON1 = 0b10000001; 
+    ADCON1 = 0b10001110; 
     /*
     ADCON1 = [ADFM,-,-,-,PCFG3,PCFG2,PCFG1,PCFG0]
-    PCFGx = 0bxxxx0001 --> AN0 como entrada analogica
-    ADFM = 0b1xxxxxxx Bit de selección para establecer la forma en que se almacena el valor de la conversión A/D  en 
-    los registros ADRESH:ADRESL :
+    PCFGx = 0bxxxx1110 --> AN0 como entrada analogica, Vref+ = VDD, Vref- = VSS
+    ADFM = 0b1xxxxxxx Bit de selección para establecer la forma en que se almacena el valor de la
+        conversión A/D en los registros ADRESH:ADRESL :
         1: Justificar  a  derecha:  los  10  bits  del  valor  A/D  se  almacenan  en  los  10  menos 
         significativos (2 en ADRESH y 8 en ADRESL). Los 6 bits más significativos quedan en “0”.
         0: Justificar  a  izquierda:  los  10  bits  del  valor  A/D  se  almacenan  en  los  10  más 
@@ -53,7 +53,7 @@ void main(){
     */
 
 //--------------------Configuracion de los pines analogicos ADCON0--------------------
-    ADCON0 = 0b10000001; 
+    ADCON0 = 0b01000001; 
     /* 
     ADCON0 = [ADCS1,ADCS0,CHS2,CHS1,CHS0,GO/DONE,-,ADON]
     ADCS1-ADCS0: Bits de selección del reloj para realizar la conversión (A/DClockSelection):
@@ -84,13 +84,31 @@ void main(){
     */
 
 //--------------------Configuracion de los pines analogicos PIR1--------------------
-    PIR1 = 0b01000000;
+    PIR1 = 0b00000000;
     /*
     PIR1 = [PSIF,ADIF,RCIF,TXIF,SSPIF,CCP1IF,TMR2IF,TMR1IF]
     ADIF: Flag de interrupción del módulo A/D. 1: conversión A/D completa, 0: conversion A/D en curso.
     Los demas no estan relacionado con el modulo A/D
     */
 
-    
+    while(1) {
+        // Iniciar conversión A/D
+        GO = 1;
+        while(GO){}; // Esperar a que termine la conversión
+        
+        // Combinar el resultado de 10 bits
+        unsigned int valor = (ADRESH << 8) | ADRESL;
+
+        // Mostrar el resultado en los displays de 7 segmentos (multiplexado)
+        // Mostrar el valor en el latch controlado por RD6 (displays menos significativos)
+        RD6 = 1; // Habilitar latch 2
+        PORTB = valor & 0xFF; // Enviar los bits menos significativos a PORTB
+        RD6 = 0; // Deshabilitar latch 2
+        
+        // Mostrar el valor en el latch controlado por RD7 (displays más significativos)
+        RD7 = 1; // Habilitar latch 1
+        PORTB = (valor >> 8) & 0xFF; // Enviar los bits más significativos a PORTB
+        RD7 = 0; // Deshabilitar latch 1
+    }
 
 }

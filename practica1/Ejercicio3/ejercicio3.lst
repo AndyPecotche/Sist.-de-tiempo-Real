@@ -1,0 +1,114 @@
+     1: // Utilice el entorno ISIS para abrir el diseño del circuito que se encuentra en la carpeta 
+     2: // “Samples\VSM  for  PICMICRO\VSM  for  PIC16\PIC ADC Example”. En este esquema se 
+     3: // observa  un  microcontrolador  PIC  16F877;  una  resistencia  variable  (que  simula  un 
+     4: // transductor) conectada a través del pin AN0; dos Latchs 74LS373 (multiplexados) cuyas 
+     5: // entradas comparten el puerto B y que son controlados a través de los pines RD6 y RD7 
+     6: // del puerto D; cuatro displays de 7 segmentos hexadecimales conectados a las salidas 
+     7: // de  los  latchs.  Configure  el  entorno  y  realice  un  programa  en  C  que  permita  capturar 
+     8: // valores analógicos realizando “polling” y muestre los valores digitales (en hexadecimal) 
+     9: // en los displays de 7 segmentos. Tenga en cuenta que : 
+    10: // 1. debe configurar el pin AN0 como entrada analógica y como tensión de referencia 
+    11: // el mismo del microcontrolador (VCC).  
+    12: // 2. los  latchs  (74LS373)  funcionan  de  forma  multiplexada  por  lo  que  requieren  la 
+    13: // activación/desactivación en el pin LE para que los datos de entrada queden en la 
+    14: // salida.  
+    15: // 3. que los displays muestran los valores en hexadecimal, por ejemplo si el valor a 
+    16: // mostrar es 1510 o 11112 mostrará la letra “F”. 
+    17: #include <htc.h>
+    18: 
+    19: void main(){
+    20:     //OPTION_REG = [-,-,T0CS,T0SE,PSA,PS2,PS1,PS0]
+    21:     //OPTION_REG = 0b00000000; //valor final de OPTION_REG
+    22: 
+    23:     //INTCON = [GIE,PEIE,T0IE,INTE,RBIE,T0IF,INTF,RBIF]
+    24:     //INTCON = 0b10100000;
+    25: 
+    26:     //PORTB = [RB7,RB6,RB5,RB4,RB3,RB2,RB1,RB0]
+    27:     //TRISB = [TRISB7,TRISB6,TRISB5,TRISB4,TRISB3,TRISB2,TRISB1,TRISB0]
+    28:     TRISB = 0b00000000; //registro PORTB(RB4) como salida
+    29: 
+    30:     //PORTA = [-,-,RA5,RA4,RA3,RA2,RA1,RA0]
+    31:     //TRISA = [-,-,TRISA5,TRISA4,TRISA3,TRISA2,TRISA1,TRISA0]
+    32:     TRISA = 0b00000001; //registro PORTA(RA0/AN0) como entrada
+    33: 
+    34:     //PORTD = [-,-,-,-,-,-,RD1,RD0]
+    35:     //TRISD = [-,-,-,-,-,-,TRISD1,TRISD0]
+    36:     TRISD = 0b00000000; //registro PORTD(RD6,RD7) como salida
+    37:     //RD6 --> LE de latch1 74LS373
+    38:     //RD7 --> LE de latch2 74LS373
+    39: 
+    40: //--------------------Configuracion de los pines analogicos ADCON1--------------------
+    41:     ADCON1 = 0b10001110; 
+    42:     /*
+    43:     ADCON1 = [ADFM,-,-,-,PCFG3,PCFG2,PCFG1,PCFG0]
+    44:     PCFGx = 0bxxxx1110 --> AN0 como entrada analogica, Vref+ = VDD, Vref- = VSS
+    45:     ADFM = 0b1xxxxxxx Bit de selección para establecer la forma en que se almacena el valor de la
+    46:         conversión A/D en los registros ADRESH:ADRESL :
+    47:         1: Justificar  a  derecha:  los  10  bits  del  valor  A/D  se  almacenan  en  los  10  menos 
+    48:         significativos (2 en ADRESH y 8 en ADRESL). Los 6 bits más significativos quedan en “0”.
+    49:         0: Justificar  a  izquierda:  los  10  bits  del  valor  A/D  se  almacenan  en  los  10  más 
+    50:         significativos (8 en ADRESH y 2 en ADRESL). Los 6 bits menos significativos quedan en 
+    51:         “0”. Si no interesa la precisión esta configuración es práctica para leer solo ADRESH 
+    52:         donde están los 8 bits más significativos 
+    53:     */
+    54: 
+    55: //--------------------Configuracion de los pines analogicos ADCON0--------------------
+    56:     ADCON0 = 0b01000001; 
+    57:     /* 
+    58:     ADCON0 = [ADCS1,ADCS0,CHS2,CHS1,CHS0,GO/DONE,-,ADON]
+    59:     ADCS1-ADCS0: Bits de selección del reloj para realizar la conversión (A/DClockSelection):
+    60:         0 FOSC/2 (1 ciclo del reloj de conversión cada 2 del reloj del sistema).
+    61:         1 FOSC/8 (1 ciclo del reloj de conversión cada 8 del reloj del sistema).
+    62:         2 FOSC/32 (1 ciclo del reloj de conversión cada 32 del reloj del sistema).
+    63:         3 FRC : reloj derivado del oscilador RC interno del modulo A/D (1 ciclo cada 4 del reloj del sistema?).
+    64:     CHS2-CHS0: Selector del canal A/D para convertir (ChannelSelection): 
+    65:         000 AN0
+    66:         001 AN1
+    67:         ...
+    68:         111 AN7
+    69:     GO/DONE: Bit de inicio de conversión A/D:
+    70:         1:  conversión A/D en progreso. Si se escribe un “1” en este bit comienza la conversión. 
+    71:         0: no hay conversión A/D en progreso. Este bit es puesto en “0” por hardware cuando 
+    72:            se completa la conversión. 
+    73:     ADON: Bit de control para activar el módulo de conversión A/D (A/D ON): 
+    74:         1: módulo A/D activado.
+    75:         0: módulo A/D desactivado.
+    76:     */
+    77: 
+    78: //--------------------Configuracion de los pines analogicos PIE1--------------------
+    79:     PIE1 = 0b00000000;
+    80:     /*
+    81:     PIE1 = [PSIE,ADIE,RCIE,TXIE,SSPIE,CCP1IE,TMR2IE,TMR1IE]
+    82:     ADIE: Habilita la interrupción del módulo A/D. 1: habilitada, 0: deshabilitada.
+    83:     Los demas no estan relacionado con el modulo A/D
+    84:     */
+    85: 
+    86: //--------------------Configuracion de los pines analogicos PIR1--------------------
+    87:     PIR1 = 0b00000000;
+    88:     /*
+    89:     PIR1 = [PSIF,ADIF,RCIF,TXIF,SSPIF,CCP1IF,TMR2IF,TMR1IF]
+    90:     ADIF: Flag de interrupción del módulo A/D. 1: conversión A/D completa, 0: conversion A/D en curso.
+    91:     Los demas no estan relacionado con el modulo A/D
+    92:     */
+    93: 
+    94:     while(1) {
+    95:         // Iniciar conversión A/D
+    96:         GO = 1;
+    97:         while(GO){}; // Esperar a que termine la conversión
+    98:         
+    99:         // Combinar el resultado de 10 bits
+   100:         unsigned int valor = (ADRESH << 8) | ADRESL;
+   101: 
+   102:         // Mostrar el resultado en los displays de 7 segmentos (multiplexado)
+   103:         // Mostrar el valor en el latch controlado por RD6 (displays menos significativos)
+   104:         RD6 = 1; // Habilitar latch 2
+   105:         PORTB = valor & 0xFF; // Enviar los bits menos significativos a PORTB
+   106:         RD6 = 0; // Deshabilitar latch 2
+   107:         
+   108:         // Mostrar el valor en el latch controlado por RD7 (displays más significativos)
+   109:         RD7 = 1; // Habilitar latch 1
+   110:         PORTB = (valor >> 8) & 0xFF; // Enviar los bits más significativos a PORTB
+   111:         RD7 = 0; // Deshabilitar latch 1
+   112:     }
+   113: 
+   114: }
