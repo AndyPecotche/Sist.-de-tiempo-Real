@@ -3,10 +3,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>       // Para nanosleep
+#include <sys/types.h>  // Para mkfifo
+#include <sys/stat.h>   // Para mkfifo
+
 //#include <include/rtl_core.h> no existe <rtl.h> ni <rtl_core>
 //por lo que rtc_prinf no se usa, rtf_create y rtf_put tampoco
 #define DEBUG 1
-#define FIFO "/dev/rtf0"
+#define FIFO "/tmp/rtf0"
 int main() {
     struct timespec ts; //estructura para pasar tiempo a nanosleep
     FILE *temperaturas;
