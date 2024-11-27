@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <semaphore.h>
 
-#define FIFO "/dev/rtf0"
+#define FIFO "/tmp/rtf0"
 #define DEBUG 1
 #define SIMCARGA 1
 int temp;
